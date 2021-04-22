@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Searchbar from './components/Searchbar.js';
 import ImageGallery from './components/ImageGallery.js';
-import ImageGalleryItem from './components/ImageGalleryItem.js';
 import Button from './components/Button.js';
 import Modal from './components/Modal.js';
 
@@ -68,8 +67,8 @@ class App extends Component {
       .finally(() => this.setState({ isLoading: false }));
   };
 
-  setLargeImg = image => {
-    this.setState({ selectedImg: image.largeImageURL });
+  setLargeImg = url => {
+    this.setState({ selectedImg: url });
     this.toggleModal();
   };
 
@@ -85,16 +84,10 @@ class App extends Component {
     return (
       <div className="App">
         <Searchbar onSubmit={this.handleSubmit} />
-          <ImageGallery>
-            {images.map(image => (
-              <ImageGalleryItem
-                key={image.id}
-                image={image}
-                setLargeImg={this.setLargeImg}
-                deleteImage={this.deleteImage}
-              />
-            ))}
-          </ImageGallery>
+          <ImageGallery
+            images = {images}
+            onClick = {this.setLargeImg}
+          />
           {isLoading && (
             <Loader
               type="TailSpin"
@@ -108,7 +101,7 @@ class App extends Component {
           <Button onLoadMore={this.getImages} />
         )}
         {showModal && (
-          <Modal largeImgUrl={selectedImg} onClose={this.toggleModal} />
+          <Modal src={this.state.selectedImg} onClose={this.toggleModal} />
         )}
       </div>
     );

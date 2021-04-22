@@ -1,16 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ImageGallery = ({children}) => {
+import ImageGalleryItem from './ImageGalleryItem.js';
+
+const ImageGallery = ({images, onClick}) => {
   return (
     <ul className="ImageGallery">
-      {children}
+      {images.map(({ id, webformatURL, largeImageURL, tags }) => {
+        return (
+          <ImageGalleryItem
+            key={id}
+            src={webformatURL}
+            alt={tags}
+            largeImageURL={largeImageURL}
+            onClick={() => onClick(largeImageURL)}
+          />
+        );
+      })}
     </ul>
   )
 }
 
 ImageGallery.propTypes = {
-  children: PropTypes.node,
+  hits: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    }),
+  ),
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ImageGallery;
